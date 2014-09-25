@@ -1,4 +1,4 @@
 db-diff
 =======
 
-DB Diff tool for Laravel
+Database diff tool for Laravel & MySQL
