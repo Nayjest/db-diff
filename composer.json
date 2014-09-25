@@ -1,0 +1,23 @@
+{
+    "name": "nayjest/db-diff",
+    "description": "",
+    "authors": [
+        {
+            "name": "Vitalii [Nayjest] Stepanenko",
+            "email": "v.stepanenko@globo-tech.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Nayjest\\DbDiff\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
