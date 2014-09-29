@@ -1,7 +1,8 @@
 <?php
 namespace Nayjest\DbDiff\Schema;
 
-use Illuminate\Support\Facades\DB;
+use Config;
+use DB;
 
 class Schema
 {
@@ -16,9 +17,10 @@ class Schema
 //	        TABLE_SCHEMA not in ('information_schema') and
 //	        TABLE_NAME not like 'diff_%'
 //	    ";
+        $ignored_db = Config::get('db-diff::ignored_db', []);
         return DB::table('information_schema.TABLES')
             ->select(DB::raw("CONCAT(TABLE_SCHEMA, '.', TABLE_NAME) as table_name"))
-            ->whereRaw("TABLE_SCHEMA not in ('information_schema','performance_schema', 'mysql')")
+            ->whereNotIn('TABLE_SCHEMA', $ignored_db)
             ->whereRaw("TABLE_NAME not like 'diff_%'")
             ->orderBy('TABLE_SCHEMA', 'ASC')
             ->orderBy('TABLE_NAME', 'ASC')
