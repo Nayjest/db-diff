@@ -2,6 +2,7 @@
 namespace Nayjest\DbDiff;
 
 use Config;
+use Illuminate\Support\Facades\View;
 use Redirect;
 use Illuminate\Routing\Controller as Base;
 use Illuminate\Support\Facades\DB;
@@ -27,16 +28,9 @@ class Controller extends Base
         } else {
             $fields = '*';
         }
-
-
-        $op = new Operation([
-            'table1' => $table1,
-            'table2' => $table2,
-            'fields' => join(',',$fields)
-        ]);
+        $op = new Operation(compact('table1', 'table2', 'fields'));
         $op->save();
-        $diff = new Diff($table1, $table2, $fields);
-        $diff->intoTempTable($op->id);
+        $op->getDiffProcessor()->intoTempTable($op->id);
         return Redirect::action('Nayjest\DbDiff\Controller@getShow', [$op->id]);
     }
 
@@ -47,25 +41,56 @@ class Controller extends Base
         return \View::make('db-diff::index', compact('schema'));
     }
 
+    public function getList()
+    {
+        $models = Operation::paginate(50);
+        return View::make('db-diff::list', compact('models'));
+    }
+
     public function getShow($id)
     {
-        $table_name = "diff_$id";
+        /** @var Operation $operation $op */
+        $operation = Operation::findOrFail($id);
 
-        Model::$current_table = $table_name;
+
+        Model::$current_table = $operation->getDiffTableAttribute();
         $model = new Model();
+        $query = $model->newQuery();
+        $diff = $operation->getDiffProcessor();
+        foreach ($diff->getPkColumns() as $name) {
+            $query->addSelect($name);
+        }
+        foreach ($diff->getDiffColumns() as $name) {
+            $query->addSelect("{$name}_1");
+            $query->addSelect("{$name}_2");
+            $query->addSelect(DB::raw("{$name}_1 - {$name}_2 as {$name}_diff"));
+        }
 
-        $dp = new EloquentDataProvider($model->newQuery());
+        $dp = new EloquentDataProvider($query);
         $config = new GridConfig;
         $config->setDataProvider($dp);
 
-
-        $db = Config::get('db-diff::db');
-        $schema = new Table("$db.$table_name");
-
-        foreach ($schema->columnNames() as $name) {
+        foreach ($diff->getPkColumns() as $name) {
             $config->addColumn(
                 (new FieldConfig)
                     ->setName($name)
+                    ->setIsSortable(true)
+            );
+        }
+        foreach ($diff->getDiffColumns() as $name) {
+            $config->addColumn(
+                (new FieldConfig)
+                    ->setName("{$name}_1")
+                    ->setIsSortable(true)
+            );
+            $config->addColumn(
+                (new FieldConfig)
+                    ->setName("{$name}_2")
+                    ->setIsSortable(true)
+            );
+            $config->addColumn(
+                (new FieldConfig)
+                    ->setName("{$name}_diff")
                     ->setIsSortable(true)
             );
         }
@@ -74,6 +99,6 @@ class Controller extends Base
         ]);
 
         $grid = new Grid($config);
-        return \View::make('db-diff::show', compact('grid'));
+        return \View::make('db-diff::show', compact('grid', 'operation'));
     }
 } 

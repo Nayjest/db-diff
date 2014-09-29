@@ -184,4 +184,17 @@ class Diff
     {
         $this->condition = $condition;
     }
+
+    /**
+     * @return array
+     */
+    public function getDiffColumns()
+    {
+        return $this->diff_columns;
+    }
+
+    public function getPkColumns()
+    {
+        return $this->table1->pk();
+    }
 } 

@@ -34,19 +34,22 @@
     <label>Fields</label>
     <input type="text" name="fields" class="form-control">
 
+    <label>Condition</label>
     <div class="row">
-        <label>Condition</label>
         <div class="col-md-4">
+            <label>Field name<small>(without table)</small></label>
             <input class="form-control" name="condition_field">
         </div>
         <div class="col-md-4">
+            <label>Comparison <small>(&gt;=,&lt;=,&gt;,&lt;,=,&lt;&gt;)</small></label>
             <input class="form-control" name="condition_compare">
         </div>
         <div class="col-md-4">
+            <label>Value <small>(With quotation)</small></label>
             <input class="form-control" name="condition_value">
         </div>
     </div>
-
+    <br>
     <input type="submit" class="btn btn-lg btn-primary">
 </form>
 @stop
