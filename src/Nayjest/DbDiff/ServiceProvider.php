@@ -1,6 +1,7 @@
 <?php namespace Nayjest\DbDiff;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Nayjest\DbDiff\Console\DbDiffMakeCommand;
 use Route;
 
 class ServiceProvider extends BaseServiceProvider
@@ -31,7 +32,12 @@ class ServiceProvider extends BaseServiceProvider
 	 */
 	public function register()
 	{
-		//
+        $this->app->bind('db-diff::command.make', function($app) {
+            return new DbDiffMakeCommand;
+        });
+        $this->commands([
+            'db-diff::command.make'
+        ]);
 	}
 
 	/**
