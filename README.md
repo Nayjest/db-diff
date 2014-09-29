@@ -31,6 +31,7 @@ This package allows to compare data in tables with same structure & save results
 
 See vendor/nayjest/db-diff/src/config/config.php
 
-| key                  | type        |  Description                                                                    |
+| Key                  | Type        |  Description                                                                    |
+|----------------------|-------------|---------------------------------------------------------------------------------|
 | db                   | string      | Database where diff results will be stored (your app's current db by default)   |
 | ignored_db           | string[]    | Databases that you will not use for diff operations                             |
