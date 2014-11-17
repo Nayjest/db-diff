@@ -1,8 +1,14 @@
 <?php
 namespace Nayjest\DbDiff;
 
-use Config;
-use Illuminate\Support\Facades\View;
+use Nayjest\Grids\Components\ColumnsHider;
+use Nayjest\Grids\Components\FiltersRow;
+use Nayjest\Grids\Components\Footer;
+use Nayjest\Grids\Components\OneCellRow;
+use Nayjest\Grids\Components\Pager;
+use Nayjest\Grids\Components\RecordsPerPage;
+use Nayjest\Grids\Components\RenderFunc;
+use Nayjest\Grids\FilterConfig;
 use Redirect;
 use Illuminate\Routing\Controller as Base;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +20,7 @@ use Nayjest\Grids\EloquentDataProvider;
 use Nayjest\Grids\FieldConfig;
 use Nayjest\Grids\Grid;
 use Nayjest\Grids\GridConfig;
+use View;
 
 class Controller extends Base
 {
@@ -38,7 +45,7 @@ class Controller extends Base
     {
         $schema = new Schema;
         //dd($s->tables());
-        return \View::make('db-diff::index', compact('schema'));
+        return View::make('db-diff::index', compact('schema'));
     }
 
     public function getList()
@@ -75,6 +82,7 @@ class Controller extends Base
                 (new FieldConfig)
                     ->setName($name)
                     ->setIsSortable(true)
+                    ->addFilter(new FilterConfig())
             );
         }
         foreach ($diff->getDiffColumns() as $name) {
@@ -95,7 +103,27 @@ class Controller extends Base
             );
         }
         $config->setComponents([
-            new Header()
+            (new Header())->setComponents([
+                (new FiltersRow),
+                (new OneCellRow)
+                    ->setComponents([
+                        (new RecordsPerPage),
+                        new ColumnsHider(),
+                        new RenderFunc(function () {
+                            return '
+                            <button class="btn btn-primary">
+                                <span class="glyphicon glyphicon-filter"></span>
+                                Filter
+                            </button>';
+                        })
+                    ])
+                    ->setRenderSection(Header::SECTION_END)
+            ]),
+            (new Footer())
+                ->addComponent(
+                    new Pager
+                )
+            ,
         ]);
 
         $grid = new Grid($config);
