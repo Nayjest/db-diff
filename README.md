@@ -34,4 +34,4 @@ See vendor/nayjest/db-diff/src/config/config.php
 | Key                  | Type        |  Description                                                                    |
 |----------------------|-------------|---------------------------------------------------------------------------------|
 | db                   | string      | Database where diff results will be stored (your app's current db by default)   |
-| ignored_db           | string[]    | Databases that you will not use for diff operations                             |
+| ignored_db           | string[]    | Databases that you will not use for diff operations, usually some system db's   |
