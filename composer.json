@@ -1,6 +1,7 @@
 {
     "name": "nayjest/db-diff",
-    "description": "",
+    "description": "Database diff tool for Laravel & MySQL",
+    "keywords": ["laravel", "db", "diff", "database", "mysql"],
     "authors": [
         {
             "name": "Vitalii [Nayjest] Stepanenko",
