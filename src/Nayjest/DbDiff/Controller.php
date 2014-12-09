@@ -3,7 +3,7 @@ namespace Nayjest\DbDiff;
 
 use Nayjest\Grids\Components\ColumnsHider;
 use Nayjest\Grids\Components\FiltersRow;
-use Nayjest\Grids\Components\Footer;
+use Nayjest\Grids\Components\TFoot;
 use Nayjest\Grids\Components\OneCellRow;
 use Nayjest\Grids\Components\Pager;
 use Nayjest\Grids\Components\RecordsPerPage;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Nayjest\DbDiff\Schema\Schema;
 use Nayjest\DbDiff\Schema\Table;
-use Nayjest\Grids\Components\Header;
+use Nayjest\Grids\Components\THead;
 use Nayjest\Grids\EloquentDataProvider;
 use Nayjest\Grids\FieldConfig;
 use Nayjest\Grids\Grid;
@@ -102,30 +102,21 @@ class Controller extends Base
                     ->setIsSortable(true)
             );
         }
-        $config->setComponents([
-            (new Header())->setComponents([
-                (new FiltersRow),
-                (new OneCellRow)
-                    ->setComponents([
-                        (new RecordsPerPage),
-                        new ColumnsHider(),
-                        new RenderFunc(function () {
-                            return '
+        $config->getComponentByName(THead::NAME)
+            ->addComponent((new OneCellRow)
+                ->setComponents([
+                    (new RecordsPerPage),
+                    new ColumnsHider(),
+                    new RenderFunc(function () {
+                        return '
                             <button class="btn btn-primary">
                                 <span class="glyphicon glyphicon-filter"></span>
                                 Filter
                             </button>';
-                        })
-                    ])
-                    ->setRenderSection(Header::SECTION_END)
-            ]),
-            (new Footer())
-                ->addComponent(
-                    new Pager
-                )
-            ,
-        ]);
-
+                    })
+                ])
+                ->setRenderSection(THead::SECTION_END)
+            );
         $grid = new Grid($config);
         return \View::make('db-diff::show', compact('grid', 'operation'));
     }
