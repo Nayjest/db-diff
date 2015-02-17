@@ -11,7 +11,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4.0",
-        "nayjest/grids": "~0.4.0",
+        "nayjest/grids": ">=0.4",
         "illuminate/support": "4.2.*"
     },
     "repositories": [
