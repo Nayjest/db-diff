@@ -81,7 +81,7 @@ class Controller extends Base
             $config->addColumn(
                 (new FieldConfig)
                     ->setName($name)
-                    ->setIsSortable(true)
+                    ->setSortable(true)
                     ->addFilter(new FilterConfig())
             );
         }
@@ -89,17 +89,17 @@ class Controller extends Base
             $config->addColumn(
                 (new FieldConfig)
                     ->setName("{$name}_1")
-                    ->setIsSortable(true)
+                    ->setSortable(true)
             );
             $config->addColumn(
                 (new FieldConfig)
                     ->setName("{$name}_2")
-                    ->setIsSortable(true)
+                    ->setSortable(true)
             );
             $config->addColumn(
                 (new FieldConfig)
                     ->setName("{$name}_diff")
-                    ->setIsSortable(true)
+                    ->setSortable(true)
             );
         }
         $config->getComponentByName(THead::NAME)
