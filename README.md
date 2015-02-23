@@ -35,3 +35,10 @@ See vendor/nayjest/db-diff/src/config/config.php
 |----------------------|-------------|---------------------------------------------------------------------------------|
 | db                   | string      | Database for storing diff results (your app's current db by default)   |
 | ignored_db           | string[]    | Databases that you will never use for diff operations, usually some system db's   |
+
+
+### License
+
+© 2014 &mdash; 2015 Vitalii Stepanenko
+
+Licensed under the MIT License.
